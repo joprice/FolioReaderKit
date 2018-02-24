@@ -7,10 +7,9 @@
 //
 
 import Foundation
-import RealmSwift
 
 /// A Highlight object
-open class Highlight: Object {
+open class Highlight {
     @objc open dynamic var bookId: String!
     @objc open dynamic var content: String!
     @objc open dynamic var contentPost: String!
@@ -21,14 +20,5 @@ open class Highlight: Object {
     @objc open dynamic var type: Int = 0
     @objc open dynamic var startOffset: Int = -1
     @objc open dynamic var endOffset: Int = -1
-
-    override open class func primaryKey()-> String {
-        return "highlightId"
-    }
 }
 
-extension Results {
-    func toArray<T>(_ ofType: T.Type) -> [T] {
-        return flatMap { $0 as? T }
-    }
-}
