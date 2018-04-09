@@ -78,35 +78,26 @@ public enum HighlightStyle: Int {
 /// Completion block
 public typealias Completion = (_ error: NSError?) -> ()
 
-extension Highlight {
+public protocol FolioReaderPersistenceDelegate: class {
 
     /// Save a Highlight with completion block
     ///
     /// - Parameters:
     ///   - readerConfig: Current folio reader configuration.
     ///   - completion: Completion block.
-    public func persist(withConfiguration readerConfig: FolioReaderConfig, completion: Completion? = nil) {
-        print("would persist")
-        completion?(nil)
-    }
+    func persist(highlight: Highlight, withConfiguration readerConfig: FolioReaderConfig, completion: Completion?)
 
     /// Remove a Highlight
     ///
     /// - Parameter readerConfig: Current folio reader configuration.
-    public func remove(withConfiguration readerConfig: FolioReaderConfig) {
-      print("would remove highlight")
-    }
+    func remove(highlight: Highlight, withConfiguration readerConfig: FolioReaderConfig)
 
     /// Remove a Highlight by ID
     ///
     /// - Parameters:
     ///   - readerConfig: Current folio reader configuration.
     ///   - highlightId: The ID to be removed
-    public static func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String) {
-        var highlight: Highlight?
-        let predicate = NSPredicate(format:"highlightId = %@", highlightId)
-        print("would remove highlght by id")
-    }
+    func removeById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String)
 
     /// Update a Highlight by ID
     ///
@@ -114,9 +105,7 @@ extension Highlight {
     ///   - readerConfig: Current folio reader configuration.
     ///   - highlightId: The ID to be removed
     ///   - type: The `HighlightStyle`
-    public static func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle) {
-        print("would update highlight")
-    }
+    func updateById(withConfiguration readerConfig: FolioReaderConfig, highlightId: String, type: HighlightStyle)
 
     /// Return a list of Highlights with a given ID
     ///
@@ -125,20 +114,13 @@ extension Highlight {
     ///   - bookId: Book ID
     ///   - page: Page number
     /// - Returns: Return a list of Highlights
-    public static func allByBookId(withConfiguration readerConfig: FolioReaderConfig, bookId: String, andPage page: NSNumber? = nil) -> [Highlight] {
-        var highlights: [Highlight]?
-        print("Would return books by id")
-        return []
-    }
+    func allByBookId(withConfiguration readerConfig: FolioReaderConfig, bookId: String, andPage page: NSNumber?) -> [Highlight]
 
     /// Return all Highlights
     ///
     /// - Parameter readerConfig: - readerConfig: Current folio reader configuration.
     /// - Returns: Return all Highlights
-    public static func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight] {
-        print("Would return all highlights")
-        return []
-    }
+    func all(withConfiguration readerConfig: FolioReaderConfig) -> [Highlight]
 }
 
 // MARK: - HTML Methods

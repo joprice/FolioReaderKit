@@ -41,6 +41,9 @@ open class FolioReaderCenter: UIViewController, UICollectionViewDelegate, UIColl
     /// This delegate receives the events from current page
     open weak var pageDelegate: FolioReaderPageDelegate?
 
+    /// This delegate receives the events from current page
+    open weak var persistenceDelegate: FolioReaderPersistenceDelegate?
+
     /// The base reader container
     open weak var readerContainer: FolioReaderContainer?
 

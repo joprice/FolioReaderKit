@@ -38,7 +38,8 @@ class FolioReaderHighlightList: UITableViewController {
             return
         }
 
-        self.highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId)
+        self.highlights = folioReader.readerCenter?.persistenceDelegate?
+            .allByBookId(withConfiguration: self.readerConfig, bookId: bookId, andPage: nil) ?? []
     }
 
     // MARK: - Table view data source
@@ -158,7 +159,7 @@ class FolioReaderHighlightList: UITableViewController {
                 Highlight.removeFromHTMLById(withinPage: page, highlightId: highlight.highlightId) // Remove from HTML
             }
 
-            highlight.remove(withConfiguration: self.readerConfig) // Remove from Database
+            self.folioReader.readerCenter?.persistenceDelegate?.remove(highlight: highlight, withConfiguration: self.readerConfig) // Remove from Database
             highlights.remove(at: (indexPath as NSIndexPath).row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }

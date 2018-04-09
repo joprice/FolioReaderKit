@@ -158,24 +158,25 @@ open class FolioReaderPage: UICollectionViewCell, UIWebViewDelegate, UIGestureRe
             return tempHtmlContent as String
         }
 
-        let highlights = Highlight.allByBookId(withConfiguration: self.readerConfig, bookId: bookId, andPage: pageNumber as NSNumber?)
+        if let highlights = folioReader.readerCenter?.persistenceDelegate?.allByBookId(withConfiguration: self.readerConfig, bookId: bookId, andPage: pageNumber as NSNumber?) {
+            if (highlights.count > 0) {
+                for item in highlights {
+                    let style = HighlightStyle.classForStyle(item.type)
+                    let tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
+                    var locator = item.contentPre + item.content
+                    locator += item.contentPost
+                    locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
+                    let range: NSRange = tempHtmlContent.range(of: locator, options: .literal)
 
-        if (highlights.count > 0) {
-            for item in highlights {
-                let style = HighlightStyle.classForStyle(item.type)
-                let tag = "<highlight id=\"\(item.highlightId!)\" onclick=\"callHighlightURL(this);\" class=\"\(style)\">\(item.content!)</highlight>"
-                var locator = item.contentPre + item.content
-                locator += item.contentPost
-                locator = Highlight.removeSentenceSpam(locator) /// Fix for Highlights
-                let range: NSRange = tempHtmlContent.range(of: locator, options: .literal)
-
-                if range.location != NSNotFound {
-                    let newRange = NSRange(location: range.location + item.contentPre.count, length: item.content.count)
-                    tempHtmlContent = tempHtmlContent.replacingCharacters(in: newRange, with: tag) as NSString
-                } else {
-                    print("highlight range not found")
+                    if range.location != NSNotFound {
+                        let newRange = NSRange(location: range.location + item.contentPre.count, length: item.content.count)
+                        tempHtmlContent = tempHtmlContent.replacingCharacters(in: newRange, with: tag) as NSString
+                    } else {
+                        print("highlight range not found")
+                    }
                 }
             }
+
         }
         return tempHtmlContent as String
     }
